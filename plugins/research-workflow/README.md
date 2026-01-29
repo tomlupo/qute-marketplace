@@ -83,7 +83,7 @@ docs/research/
 This plugin is part of qute-marketplace. Install the marketplace:
 
 ```bash
-claude plugin install ~/projects/qute-ai-tools/claude-marketplace
+claude plugin install github:twilc/qute-marketplace
 ```
 
 Or from GitHub:

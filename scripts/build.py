@@ -8,7 +8,7 @@ Generates:
 3. plugins/*/hooks/hooks.json - Converted hook format (if needed)
 
 This allows the marketplace to be registered with:
-    claude plugin marketplace add ~/projects/qute-ai-tools/claude-marketplace
+    claude plugin marketplace add github:twilc/qute-marketplace
 
 And individual plugins installed with:
     claude plugin install <plugin-name>@qute-marketplace

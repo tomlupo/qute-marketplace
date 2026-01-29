@@ -96,7 +96,7 @@ The handler has good structure but needs security hardening.
 Part of qute-marketplace:
 
 ```bash
-claude plugin install ~/projects/qute-ai-tools/claude-marketplace
+claude plugin install github:twilc/qute-marketplace
 ```
 
 ## License

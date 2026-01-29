@@ -16,7 +16,7 @@ Collaborative brainstorming with multiple AI models for idea generation.
 **Run with uv (handles dependencies automatically):**
 
 ```bash
-cd /home/twilc/projects/qute-ai-tools/claude-marketplace/plugins/llm-council && uv run python scripts/council_brainstorm.py "<topic>" [--style <style>]
+cd ~/projects/qute-marketplace/plugins/llm-council && uv run python scripts/council_brainstorm.py "<topic>" [--style <style>]
 ```
 
 The script automatically:
@@ -29,5 +29,5 @@ The script automatically:
 ## Example
 
 ```bash
-cd /home/twilc/projects/qute-ai-tools/claude-marketplace/plugins/llm-council && uv run python scripts/council_brainstorm.py "Features for a new CLI tool" --style practical
+cd ~/projects/qute-marketplace/plugins/llm-council && uv run python scripts/council_brainstorm.py "Features for a new CLI tool" --style practical
 ```

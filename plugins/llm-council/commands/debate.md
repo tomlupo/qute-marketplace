@@ -16,7 +16,7 @@ Have multiple AI models debate a topic with structured argumentation.
 **Run with uv (handles dependencies automatically):**
 
 ```bash
-cd /home/twilc/projects/qute-ai-tools/claude-marketplace/plugins/llm-council && uv run python scripts/council_debate.py "<topic>" [--rounds <n>]
+cd ~/projects/qute-marketplace/plugins/llm-council && uv run python scripts/council_debate.py "<topic>" [--rounds <n>]
 ```
 
 The script automatically:
@@ -29,5 +29,5 @@ The script automatically:
 ## Example
 
 ```bash
-cd /home/twilc/projects/qute-ai-tools/claude-marketplace/plugins/llm-council && uv run python scripts/council_debate.py "Microservices vs Monolith for a startup"
+cd ~/projects/qute-marketplace/plugins/llm-council && uv run python scripts/council_debate.py "Microservices vs Monolith for a startup"
 ```

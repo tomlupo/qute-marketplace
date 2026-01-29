@@ -16,7 +16,7 @@ Get answers from multiple AI models (GPT, Gemini, Claude, DeepSeek) with peer re
 **Run with uv (handles dependencies automatically):**
 
 ```bash
-cd /home/twilc/projects/qute-ai-tools/claude-marketplace/plugins/llm-council && uv run python scripts/council_ask.py "<question>" [--quick]
+cd ~/projects/qute-marketplace/plugins/llm-council && uv run python scripts/council_ask.py "<question>" [--quick]
 ```
 
 The script automatically:
@@ -29,5 +29,5 @@ The script automatically:
 ## Example
 
 ```bash
-cd /home/twilc/projects/qute-ai-tools/claude-marketplace/plugins/llm-council && uv run python scripts/council_ask.py "What's the best approach for caching in Python?" --quick
+cd ~/projects/qute-marketplace/plugins/llm-council && uv run python scripts/council_ask.py "What's the best approach for caching in Python?" --quick
 ```

@@ -9,7 +9,7 @@ A personal Claude Code plugin marketplace. Register once, add plugins easily.
 ### Install the Marketplace
 
 ```bash
-claude plugin install ~/projects/qute-ai-tools/claude-marketplace
+claude plugin install github:twilc/qute-marketplace
 ```
 
 ### Install from GitHub
@@ -23,7 +23,7 @@ claude plugin install github:twilc/claude-marketplace
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Register marketplace once:                              │
-│  claude plugin install ~/projects/qute-ai-tools/claude-marketplace │
+│  claude plugin install github:twilc/qute-marketplace │
 └─────────────────────────────────────────────────────────┘
                             │
                             ▼

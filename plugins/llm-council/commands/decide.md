@@ -16,7 +16,7 @@ Get decision support with pros/cons analysis from multiple AI models.
 **Run with uv (handles dependencies automatically):**
 
 ```bash
-cd /home/twilc/projects/qute-ai-tools/claude-marketplace/plugins/llm-council && uv run python scripts/council_decide.py "<decision>" --options "<opt1,opt2,...>"
+cd ~/projects/qute-marketplace/plugins/llm-council && uv run python scripts/council_decide.py "<decision>" --options "<opt1,opt2,...>"
 ```
 
 The script automatically:
@@ -29,5 +29,5 @@ The script automatically:
 ## Example
 
 ```bash
-cd /home/twilc/projects/qute-ai-tools/claude-marketplace/plugins/llm-council && uv run python scripts/council_decide.py "Which database?" --options "PostgreSQL,MongoDB,SQLite"
+cd ~/projects/qute-marketplace/plugins/llm-council && uv run python scripts/council_decide.py "Which database?" --options "PostgreSQL,MongoDB,SQLite"
 ```
