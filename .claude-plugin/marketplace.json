@@ -8,6 +8,36 @@
   },
   "plugins": [
     {
+      "name": "context-management",
+      "description": "Automatic context budget management - injects strategies when reading large files via PreToolUse hook on Read",
+      "version": "1.0.0",
+      "author": {
+        "name": "twilc"
+      },
+      "source": "./plugins/context-management",
+      "category": "utility"
+    },
+    {
+      "name": "datasets-guide",
+      "description": "Dataset management guidelines - directory structure, data flow, naming conventions, and quality practices",
+      "version": "1.0.0",
+      "author": {
+        "name": "twilc"
+      },
+      "source": "./plugins/datasets-guide",
+      "category": "utility"
+    },
+    {
+      "name": "documentation-guide",
+      "description": "Documentation standards and directory structure guidelines for organizing project docs",
+      "version": "1.0.0",
+      "author": {
+        "name": "twilc"
+      },
+      "source": "./plugins/documentation-guide",
+      "category": "utility"
+    },
+    {
       "name": "forced-eval",
       "description": "Force explicit evaluation of Skills, MCP Tools, and Agents before implementation (84% activation rate)",
       "version": "1.0.0",
