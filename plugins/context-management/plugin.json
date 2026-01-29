@@ -1,0 +1,11 @@
+{
+  "name": "context-management",
+  "version": "1.0.0",
+  "description": "Automatic context budget management - injects strategies when reading large files via PreToolUse hook on Read",
+  "author": "twilc",
+  "commands": [],
+  "skills": [
+    "skills/context-management"
+  ],
+  "hooks": "hooks/hooks.json"
+}

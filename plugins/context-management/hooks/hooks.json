@@ -1,0 +1,18 @@
+{
+  "description": "Injects context management strategies when reading large files (>500 lines / >50KB)",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/pre_read_context_guard.py",
+            "tools": [
+              "Read"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

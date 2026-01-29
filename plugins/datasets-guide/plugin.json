@@ -1,0 +1,10 @@
+{
+  "name": "datasets-guide",
+  "version": "1.0.0",
+  "description": "Dataset management guidelines - directory structure, data flow, naming conventions, and quality practices",
+  "author": "twilc",
+  "commands": [],
+  "skills": [
+    "skills/datasets"
+  ]
+}
