@@ -1,0 +1,7 @@
+{
+  "name": "datasets-guide",
+  "description": "Dataset management guidelines - directory structure, data flow, naming conventions, and quality practices",
+  "author": {
+    "name": "twilc"
+  }
+}
