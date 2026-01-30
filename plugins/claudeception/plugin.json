@@ -1,0 +1,11 @@
+{
+  "name": "claudeception",
+  "version": "3.0.0",
+  "description": "Continuous learning system - extracts reusable knowledge from work sessions into new Claude Code skills via UserPromptSubmit hook",
+  "author": "blader",
+  "commands": [],
+  "skills": [
+    "skills/claudeception"
+  ],
+  "hooks": "hooks/hooks.json"
+}

@@ -1,0 +1,7 @@
+{
+  "name": "claudeception",
+  "description": "Continuous learning system - extracts reusable knowledge from work sessions into new Claude Code skills via UserPromptSubmit hook",
+  "author": {
+    "name": "blader"
+  }
+}

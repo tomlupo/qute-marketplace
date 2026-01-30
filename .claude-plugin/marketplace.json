@@ -8,6 +8,16 @@
   },
   "plugins": [
     {
+      "name": "claudeception",
+      "description": "Continuous learning system - extracts reusable knowledge from work sessions into new Claude Code skills via UserPromptSubmit hook",
+      "version": "3.0.0",
+      "author": {
+        "name": "blader"
+      },
+      "source": "./plugins/claudeception",
+      "category": "utility"
+    },
+    {
       "name": "context-management",
       "description": "Automatic context budget management - injects strategies when reading large files via PreToolUse hook on Read",
       "version": "1.0.0",

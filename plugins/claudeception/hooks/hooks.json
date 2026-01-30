@@ -1,0 +1,15 @@
+{
+  "description": "Evaluates every user prompt for extractable knowledge worth preserving as a skill",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/claudeception_activator.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
