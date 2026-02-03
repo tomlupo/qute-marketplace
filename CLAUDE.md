@@ -139,16 +139,15 @@ Available hook points used in this project:
 - All plugins must have a `plugin.json` at their root
 - Run `build.py` after any structural change
 
-## Current Plugin Registry (9 plugins)
+## Current Plugin Registry (8 plugins)
 
 | Plugin               | Category | Components               |
 |----------------------|----------|--------------------------|
+| claudeception        | utility  | skill, hook              |
 | context-management   | utility  | skill, hook, script      |
 | datasets-guide       | utility  | skill                    |
 | documentation-guide  | utility  | skill                    |
 | forced-eval          | utility  | hook, script             |
-| llm-council          | utility  | commands, skill, hook    |
-| llm-external-review  | utility  | commands, skill          |
 | notifications        | utility  | commands, hook, scripts  |
 | research-workflow    | utility  | commands, skill          |
 | workflow-plugin      | utility  | commands, skills, hooks  |

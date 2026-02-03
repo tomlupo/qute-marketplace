@@ -58,26 +58,6 @@
       "category": "utility"
     },
     {
-      "name": "llm-council",
-      "description": "Multi-model council for questions, debates, decisions, and brainstorming with peer review",
-      "version": "1.0.0",
-      "author": {
-        "name": "twilc"
-      },
-      "source": "./plugins/llm-council",
-      "category": "utility"
-    },
-    {
-      "name": "llm-external-review",
-      "description": "Invoke external LLM models (Codex, Gemini) for code review, architecture review, and brainstorming",
-      "version": "1.0.0",
-      "author": {
-        "name": "twilc"
-      },
-      "source": "./plugins/llm-external-review",
-      "category": "utility"
-    },
-    {
       "name": "notifications",
       "description": "Push notifications via ntfy.sh for Claude events",
       "version": "1.0.0",
