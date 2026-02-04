@@ -175,6 +175,14 @@ def process_plugin(plugin_dir: Path, prefix: str) -> dict | None:
         if convert_hooks_format(old_hooks_path, new_hooks_path, plugin_dir.name):
             print(f"     ✓ Converted hooks format")
 
+    # Validate rules if present
+    for rule_path in old_manifest.get("rules", []):
+        full_path = plugin_dir / rule_path
+        if full_path.exists():
+            print(f"     ✓ OK: Rule: {rule_path}")
+        else:
+            print(f"     ⚠ WARNING: Rule not found: {rule_path}")
+
     # Build marketplace entry
     marketplace_entry = {
         "name": plugin_manifest["name"],

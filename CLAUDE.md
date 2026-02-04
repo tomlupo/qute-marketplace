@@ -9,9 +9,6 @@ qute-marketplace/
 ├── .claude-plugin/
 │   └── marketplace.json        # AUTO-GENERATED — do not edit directly
 ├── plugins/                    # Internal plugins (source of truth)
-│   ├── context-management/     # Hook: context budget on Read
-│   ├── datasets-guide/         # Skill: dataset conventions
-│   ├── documentation-guide/    # Skill: doc standards
 │   ├── forced-eval/            # Hook: force tool evaluation before implementation
 │   ├── notifications/          # Commands + hook: ntfy.sh push notifications
 │   ├── research-workflow/      # Commands: ML/DS research lifecycle
@@ -71,6 +68,7 @@ Every plugin has a `plugin.json` manifest:
   "author": "twilc",
   "commands": ["commands/example.md"],
   "skills": ["skills/skill-name"],
+  "rules": ["rules/rule-name.md"],
   "hooks": "hooks/hooks.json"
 }
 ```
@@ -81,6 +79,7 @@ Standard directories inside a plugin:
 |------------- |--------------------------------------|
 | `commands/`  | Markdown files defining slash commands |
 | `skills/`    | `SKILL.md` files with domain knowledge |
+| `rules/`     | Markdown files always loaded into conversations |
 | `hooks/`     | `hooks.json` for lifecycle hooks     |
 | `scripts/`   | Python/shell scripts invoked by hooks |
 | `config/`    | JSON configuration files             |
@@ -88,8 +87,7 @@ Standard directories inside a plugin:
 
 ## Plugin Types
 
-**Hook-only** (invisible, no user commands): `forced-eval`, `context-management`, `strategic-compact`, `skill-use-logger`
-**Skill-only** (knowledge injection): `datasets-guide`, `documentation-guide`
+**Hook-only** (invisible, no user commands): `forced-eval`, `strategic-compact`, `skill-use-logger`
 **Command + hook** (user-invokable + automatic): `session-persistence`, `notifications`
 **Command-based** (user-invokable): `research-workflow`
 **External workflow** (commands + skills + hooks): `homunculus`, `compound-engineering`
@@ -121,7 +119,7 @@ Available hook points used in this project:
 | Hook                | When                        | Used By                                    |
 |---------------------|-----------------------------|---------------------------------------------|
 | `UserPromptSubmit`  | Before processing prompt    | homunculus, forced-eval                     |
-| `PreToolUse`        | Before tool execution       | context-management, strategic-compact       |
+| `PreToolUse`        | Before tool execution       | strategic-compact                           |
 | `PostToolUse`       | After tool execution        | homunculus, notifications, skill-use-logger  |
 | `PreCompact`        | Before context compaction   | strategic-compact                           |
 | `SessionStart`      | Session begins              | session-persistence                         |
@@ -140,18 +138,16 @@ Available hook points used in this project:
 - Command format: `/plugin-name:command-name`
 - One command per markdown file in `commands/`
 - One skill per directory in `skills/` with a `SKILL.md`
+- One rule per markdown file in `rules/`
 - All plugins must have a `plugin.json` at their root
 - Run `build.py` after any structural change
 
-## Current Plugin Registry (9 internal + 3 external)
+## Current Plugin Registry (6 internal + 3 external)
 
 ### Internal plugins
 
 | Plugin               | Category | Components               |
 |----------------------|----------|--------------------------|
-| context-management   | utility  | skill, hook, script      |
-| datasets-guide       | utility  | skill                    |
-| documentation-guide  | utility  | skill                    |
 | forced-eval          | utility  | hook, script             |
 | notifications        | utility  | commands, hook, scripts  |
 | research-workflow    | utility  | commands, skill          |
