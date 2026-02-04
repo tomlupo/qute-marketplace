@@ -8,6 +8,16 @@
   },
   "plugins": [
     {
+      "name": "doc-enforcer",
+      "description": "PostToolUse hook that tracks code vs doc file edits and reminds when documentation may need updating",
+      "version": "1.0.0",
+      "author": {
+        "name": "twilc"
+      },
+      "source": "./plugins/doc-enforcer",
+      "category": "utility"
+    },
+    {
       "name": "forced-eval",
       "description": "Force explicit evaluation of Skills, MCP Tools, and Agents before implementation (84% activation rate)",
       "version": "1.0.0",

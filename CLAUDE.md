@@ -9,6 +9,7 @@ qute-marketplace/
 ├── .claude-plugin/
 │   └── marketplace.json        # AUTO-GENERATED — do not edit directly
 ├── plugins/                    # Internal plugins (source of truth)
+│   ├── doc-enforcer/           # Hook: reminds when docs may need updating
 │   ├── forced-eval/            # Hook: force tool evaluation before implementation
 │   ├── notifications/          # Commands + hook: ntfy.sh push notifications
 │   ├── research-workflow/      # Commands: ML/DS research lifecycle
@@ -87,7 +88,7 @@ Standard directories inside a plugin:
 
 ## Plugin Types
 
-**Hook-only** (invisible, no user commands): `forced-eval`, `strategic-compact`, `skill-use-logger`
+**Hook-only** (invisible, no user commands): `doc-enforcer`, `forced-eval`, `strategic-compact`, `skill-use-logger`
 **Command + hook** (user-invokable + automatic): `session-persistence`, `notifications`
 **Command-based** (user-invokable): `research-workflow`
 **External workflow** (commands + skills + hooks): `homunculus`, `compound-engineering`
@@ -120,7 +121,7 @@ Available hook points used in this project:
 |---------------------|-----------------------------|---------------------------------------------|
 | `UserPromptSubmit`  | Before processing prompt    | homunculus, forced-eval                     |
 | `PreToolUse`        | Before tool execution       | strategic-compact                           |
-| `PostToolUse`       | After tool execution        | homunculus, notifications, skill-use-logger  |
+| `PostToolUse`       | After tool execution        | doc-enforcer, homunculus, notifications, skill-use-logger |
 | `PreCompact`        | Before context compaction   | strategic-compact                           |
 | `SessionStart`      | Session begins              | session-persistence                         |
 | `Stop`              | Session ends                | homunculus, session-persistence              |
@@ -142,12 +143,13 @@ Available hook points used in this project:
 - All plugins must have a `plugin.json` at their root
 - Run `build.py` after any structural change
 
-## Current Plugin Registry (6 internal + 3 external)
+## Current Plugin Registry (7 internal + 3 external)
 
 ### Internal plugins
 
 | Plugin               | Category | Components               |
 |----------------------|----------|--------------------------|
+| doc-enforcer         | utility  | hook, script             |
 | forced-eval          | utility  | hook, script             |
 | notifications        | utility  | commands, hook, scripts  |
 | research-workflow    | utility  | commands, skill          |
