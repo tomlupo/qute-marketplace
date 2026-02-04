@@ -1,215 +1,187 @@
 # Qute Marketplace
 
-## Overview
-
-A personal Claude Code plugin marketplace. Register once, add plugins easily.
+Personal Claude Code plugin marketplace. Install once, get access to all plugins.
 
 ## Installation
 
-### Install the Marketplace
+### From GitHub (recommended)
 
 ```bash
-claude plugin install github:twilc/qute-marketplace
+claude plugin install github:tomlupo/qute-marketplace
 ```
 
-### Install from GitHub
+This registers the marketplace and installs all internal plugins:
+
+| Plugin | What it does |
+|--------|-------------|
+| **context-management** | Guards context budget when reading large files |
+| **forced-eval** | Forces skill/tool evaluation before jumping to implementation |
+| **strategic-compact** | Suggests `/compact` at 50 tool calls, then every 25 |
+| **skill-use-logger** | Logs skill invocations to `.claude/skill-use-log.jsonl` |
+| **notifications** | Push notifications via ntfy.sh when tasks complete |
+| **session-persistence** | Saves session state on exit, reports unfinished work on start |
+| **research-workflow** | ML/DS research lifecycle — hypotheses, experiments, findings |
+| **datasets-guide** | Dataset management conventions and directory structure |
+| **documentation-guide** | Documentation standards and organization guidelines |
+
+### Adding external plugins
+
+For the full learning stack, clone the repo and fetch externals:
 
 ```bash
-claude plugin install github:twilc/claude-marketplace
+git clone https://github.com/tomlupo/qute-marketplace.git
+cd qute-marketplace
+./setup.sh   # fetches externals + rebuilds marketplace
 ```
 
-## Quick Start
+---
+
+## Recommended External Plugins
+
+These are curated external plugins that complement the internal utilities.
+
+### homunculus — Learning + Memory
+
+> [github:humanplane/homunculus](https://github.com/humanplane/homunculus)
+
+A living plugin that observes your work, learns instincts, and evolves capabilities over time. Runs silently in the background — no intervention needed.
+
+**What it does automatically:**
+- Captures observations on every prompt and tool use (hooks)
+- Spawns an observer agent at session start to process pending observations
+- Creates instincts from patterns it detects — no approval needed
+- Proposes evolution when 5+ instincts cluster in a domain
+
+**Commands:**
+
+| Command | Description |
+|---------|-------------|
+| `/homunculus:init` | Birth or wake your homunculus in a project |
+| `/homunculus:status` | Check instincts, observations, identity |
+| `/homunculus:evolve` | Grow new capabilities from clustered instincts |
+| `/homunculus:export` | Export instincts for sharing |
+| `/homunculus:import` | Import instincts from others |
+
+### compound-engineering — Workflow Automation
+
+> [github:EveryInc/compound-engineering-plugin](https://github.com/EveryInc/compound-engineering-plugin)
+
+Full development lifecycle: brainstorm, plan, work, review, document. 19 commands, 15 skills, specialized agents.
+
+**Core workflow loop:**
+
+| Command | Description |
+|---------|-------------|
+| `/workflows:brainstorm` | Explore ideas and approaches before committing |
+| `/workflows:plan` | Turn feature ideas into detailed implementation plans |
+| `/workflows:work` | Execute plans with worktrees and task tracking |
+| `/workflows:review` | Multi-agent code review before merging |
+| `/workflows:compound` | Document learnings to make future work easier |
+
+### How they work together
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│  Register marketplace once:                              │
-│  claude plugin install github:twilc/qute-marketplace │
-└─────────────────────────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────┐
-│  To add a plugin:                                       │
-│  1. Drop plugin folder into plugins/                    │
-│  2. Run: python scripts/build.py                        │
-│  3. Restart Claude → new commands available!            │
-└─────────────────────────────────────────────────────────┘
+Session start
+  session-persist  reports recent sessions with unfinished work
+  homunculus       loads identity, spawns observer, processes pending observations
+  forced-eval      reminds to check skills/tools before acting
+
+Background (silent, every interaction)
+  homunculus       captures prompts + tool use to observations.jsonl
+  context-mgmt     guards against reading huge files
+  strategic-compact  suggests /compact at 50 tool calls, then every 25
+  skill-logger     records skill invocations to skill-use-log.jsonl
+
+Workflow loop
+  /workflows:brainstorm  → explore ideas and approaches
+  /workflows:plan        → turn ideas into implementation plans
+  /workflows:work        → execute with worktrees and task tracking
+  /workflows:review      → multi-agent code review before merging
+  /workflows:compound    → document learnings for future work
+
+Evolution
+  homunculus       clusters observations into instincts automatically
+  /homunculus:evolve  → when 5+ instincts cluster, propose new capability
+
+Session end
+  session-persist  saves session state to ~/.claude/sessions/
+  homunculus       increments session count, observations ready for next start
 ```
 
-## Directory Structure
+---
 
-```
-claude-marketplace/
-├── .claude-plugin/
-│   └── plugin.json            # AUTO-GENERATED: aggregates all plugins
-├── hooks/
-│   └── merged-hooks.json      # AUTO-GENERATED: merged hooks
-├── plugins/                   # All plugins
-│   ├── workflow-plugin/       # Session & context management
-│   ├── research-workflow/     # Research documentation
-│   ├── llm-external-review/   # Multi-model code review
-│   └── notifications/         # ntfy.sh push notifications
-├── external/                  # Plugins cloned from GitHub
-├── scripts/                   # Management scripts
-│   ├── build.py               # Rebuild manifest after changes
-│   ├── create.py              # Create new plugin from template
-│   ├── fetch.py               # Clone plugin from GitHub
-│   └── update.py              # Update external plugins
-└── templates/
-    └── plugin-template/       # Template for new plugins
-```
+## Managing Plugins
 
-## Scripts
-
-### Build Manifest
-
-Run after adding/removing/modifying plugins:
-
-```bash
-python scripts/build.py
-```
-
-### Create New Plugin
-
-```bash
-python scripts/create.py my-new-plugin
-python scripts/build.py
-# Restart Claude → /my-new-plugin:* commands available
-```
-
-### Fetch Plugin from GitHub
+### Fetch an external plugin
 
 ```bash
 python scripts/fetch.py github:username/repo-name
 python scripts/build.py
-# Restart Claude → new commands available
 ```
 
-### Update External Plugins
+The build script auto-detects external marketplace repos (those with `.claude-plugin/marketplace.json`) and scans their `plugins/` subdirectories.
+
+### Create a new internal plugin
 
 ```bash
-# Update all
-python scripts/update.py
-
-# Update specific
-python scripts/update.py plugin-name
+python scripts/create.py my-plugin
+# Edit plugins/my-plugin/plugin.json, add commands/skills/hooks
+python scripts/build.py
 ```
 
-## Included Plugins
-
-### workflow-plugin
-
-Session, task, and context management for Claude Code. Prevents context degradation through auto-handoffs and maintains a structured ledger system.
-
-**Commands:**
-| Command | Description |
-|---------|-------------|
-| `/workflow:init` | Initialize workflow infrastructure in a project |
-| `/workflow:session [name]` | Start new or bind to existing session |
-| `/workflow:session-update [notes]` | Add progress notes to active session |
-| `/workflow:session-finish` | End session with outcome tracking |
-| `/workflow:sessions` | View status overview (ledger, tasks, sessions) |
-
-**Skills:** workflow-management, context-management, worktrees
-
----
-
-### research-workflow
-
-Comprehensive research workflow for ML/data science projects. Track hypotheses, experiments, findings, and academic papers.
-
-**Commands:**
-| Command | Description |
-|---------|-------------|
-| `/research:start <topic>` | Initialize research structure for a topic |
-| `/research:hypothesis "<statement>"` | Document a testable hypothesis |
-| `/research:experiment <name>` | Log an experiment with setup & results |
-| `/research:finding "<title>"` | Document a validated finding |
-| `/research:paper <url\|file>` | Read and extract paper insights |
-| `/research:index` | Display research index overview |
-
-**Skills:** research
-
-**Output:** Creates `docs/research/` with hypotheses, experiments, findings, and papers.
-
----
-
-### llm-external-review
-
-Multi-model code review plugin. Get second opinions from external AI models (GPT-5, Gemini, etc.).
-
-**Commands:**
-| Command | Description |
-|---------|-------------|
-| `/llm-external-review:code <file>` | Review code with external AI model |
-| `/llm-external-review:compare <file>` | Get reviews from multiple models, compare |
-| `/llm-external-review:architecture` | Review project architecture |
-| `/llm-external-review:security <file>` | Security-focused code analysis (OWASP) |
-
-**Skills:** llm-external-review
-
-**Configuration:** Set API keys in environment variables (`OPENAI_API_KEY`, `GOOGLE_API_KEY`).
-
----
-
-### notifications
-
-Push notifications via [ntfy.sh](https://ntfy.sh/) for Claude events. Get notified on your phone/desktop when long tasks complete, builds finish, or errors occur.
-
-**Commands:**
-| Command | Description |
-|---------|-------------|
-| `/notify:send "<message>"` | Send a push notification |
-| `/notify:config` | View/edit notification settings |
-| `/notify:test` | Send test notification to verify setup |
-
-**Configuration:** Edit `plugins/notifications/config/ntfy.json` to set your topic and enable/disable events.
-
-**Setup:**
-1. Install ntfy app on phone/desktop
-2. Subscribe to your topic (default: `claude-notifications`)
-3. Run `/notify:test` to verify
-
----
-
-## Adding Your Own Plugin
-
-1. Create plugin structure:
-   ```
-   plugins/my-plugin/
-   ├── plugin.json
-   ├── commands/
-   │   └── my-command.md
-   ├── skills/
-   ├── hooks/
-   └── scripts/
-   ```
-
-2. Define `plugin.json`:
-   ```json
-   {
-     "name": "my-plugin",
-     "version": "1.0.0",
-     "description": "My awesome plugin",
-     "commands": ["commands/my-command.md"],
-     "skills": [],
-     "hooks": ""
-   }
-   ```
-
-3. Run `python scripts/build.py`
-
-4. Restart Claude
-
-## Sharing via GitHub
-
-Push to GitHub and anyone can install:
+### Update external plugins
 
 ```bash
-# Publish
-git init && git add . && git commit -m "Initial" && git push
+python scripts/update.py             # Update all
+python scripts/update.py homunculus   # Update specific
+python scripts/build.py
+```
 
-# Install (others)
-claude plugin install github:twilc/claude-marketplace
+### Remove a plugin
+
+```bash
+rm -rf plugins/plugin-name    # internal
+rm -rf external/repo-name     # external
+python scripts/build.py
+```
+
+### Rebuild after any change
+
+```bash
+python scripts/build.py
+```
+
+Never hand-edit `.claude-plugin/marketplace.json` — it is overwritten by `build.py`.
+
+---
+
+## Directory Structure
+
+```
+qute-marketplace/
+├── .claude-plugin/
+│   └── marketplace.json          # AUTO-GENERATED by build.py
+├── plugins/                      # Internal plugins
+│   ├── context-management/
+│   ├── datasets-guide/
+│   ├── documentation-guide/
+│   ├── forced-eval/
+│   ├── notifications/
+│   ├── research-workflow/
+│   ├── session-persistence/
+│   ├── skill-use-logger/
+│   └── strategic-compact/
+├── external/                     # Cloned from GitHub (gitignored)
+│   ├── compound-engineering-plugin/
+│   └── homunculus/
+├── scripts/
+│   ├── build.py                  # Rebuild marketplace manifest
+│   ├── create.py                 # Scaffold new plugin
+│   ├── fetch.py                  # Clone from GitHub
+│   └── update.py                 # Git pull externals
+├── setup.sh                      # Fetch externals + build (run after clone)
+└── templates/
+    └── plugin-template/
 ```
 
 ## License

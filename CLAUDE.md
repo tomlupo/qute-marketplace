@@ -13,12 +13,14 @@ qute-marketplace/
 │   ├── datasets-guide/         # Skill: dataset conventions
 │   ├── documentation-guide/    # Skill: doc standards
 │   ├── forced-eval/            # Hook: force tool evaluation before implementation
-│   ├── llm-council/            # Commands: multi-model consensus
-│   ├── llm-external-review/    # Commands: external LLM code review
 │   ├── notifications/          # Commands + hook: ntfy.sh push notifications
 │   ├── research-workflow/      # Commands: ML/DS research lifecycle
-│   └── workflow-plugin/        # Commands + hooks: session/task management
+│   ├── session-persistence/     # Hooks + commands: save/restore session state
+│   ├── skill-use-logger/       # Hook: logs skill invocations to JSONL
+│   └── strategic-compact/      # Hook: suggests /compact at tool-call thresholds
 ├── external/                   # Plugins cloned from GitHub (gitignored)
+│   ├── compound-engineering-plugin/  # Workflow: plan → work → review
+│   └── homunculus/             # Learning + memory: observation → instincts
 ├── scripts/
 │   ├── build.py                # Regenerate marketplace.json from plugins/
 │   ├── create.py               # Scaffold new plugin from template
@@ -86,10 +88,11 @@ Standard directories inside a plugin:
 
 ## Plugin Types
 
-**Hook-only** (invisible, no user commands): `forced-eval`, `context-management`
+**Hook-only** (invisible, no user commands): `forced-eval`, `context-management`, `strategic-compact`, `skill-use-logger`
 **Skill-only** (knowledge injection): `datasets-guide`, `documentation-guide`
-**Command-based** (user-invokable): `llm-council`, `llm-external-review`, `notifications`
-**Workflow** (commands + skills + hooks): `workflow-plugin`, `research-workflow`
+**Command + hook** (user-invokable + automatic): `session-persistence`, `notifications`
+**Command-based** (user-invokable): `research-workflow`
+**External workflow** (commands + skills + hooks): `homunculus`, `compound-engineering`
 
 ## Hook System
 
@@ -115,13 +118,14 @@ Hooks fire at lifecycle events. Current format:
 
 Available hook points used in this project:
 
-| Hook                | When                        | Used By                          |
-|---------------------|-----------------------------|----------------------------------|
-| `SessionStart`      | Session begins              | workflow-plugin                  |
-| `UserPromptSubmit`  | Before processing prompt    | forced-eval, workflow-plugin     |
-| `PreToolUse`        | Before tool execution       | context-management, llm-council  |
-| `PostToolUse`       | After tool execution        | notifications, workflow-plugin   |
-| `PreCompact`        | Before context compaction   | workflow-plugin                  |
+| Hook                | When                        | Used By                                    |
+|---------------------|-----------------------------|---------------------------------------------|
+| `UserPromptSubmit`  | Before processing prompt    | homunculus, forced-eval                     |
+| `PreToolUse`        | Before tool execution       | context-management, strategic-compact       |
+| `PostToolUse`       | After tool execution        | homunculus, notifications, skill-use-logger  |
+| `PreCompact`        | Before context compaction   | strategic-compact                           |
+| `SessionStart`      | Session begins              | session-persistence                         |
+| `Stop`              | Session ends                | homunculus, session-persistence              |
 
 ## Hook Script Conventions
 
@@ -139,18 +143,29 @@ Available hook points used in this project:
 - All plugins must have a `plugin.json` at their root
 - Run `build.py` after any structural change
 
-## Current Plugin Registry (8 plugins)
+## Current Plugin Registry (9 internal + 3 external)
+
+### Internal plugins
 
 | Plugin               | Category | Components               |
 |----------------------|----------|--------------------------|
-| claudeception        | utility  | skill, hook              |
 | context-management   | utility  | skill, hook, script      |
 | datasets-guide       | utility  | skill                    |
 | documentation-guide  | utility  | skill                    |
 | forced-eval          | utility  | hook, script             |
 | notifications        | utility  | commands, hook, scripts  |
 | research-workflow    | utility  | commands, skill          |
-| workflow-plugin      | utility  | commands, skills, hooks  |
+| session-persistence  | utility  | commands, hooks, scripts |
+| skill-use-logger     | utility  | hook, script             |
+| strategic-compact    | utility  | hooks, scripts           |
+
+### External plugins (via fetch.py)
+
+| Plugin               | Source                                    | Components                    |
+|----------------------|-------------------------------------------|-------------------------------|
+| compound-engineering | github:EveryInc/compound-engineering-plugin | agents, commands, skills     |
+| coding-tutor         | github:EveryInc/compound-engineering-plugin | commands, skills             |
+| homunculus           | github:humanplane/homunculus              | skills, hooks, agents, commands |
 
 ## Common Tasks
 
