@@ -35,12 +35,23 @@ MARKETPLACE_OWNER = {
 
 
 def load_old_manifest(plugin_dir: Path) -> dict[str, Any] | None:
-    """Load plugin's old-style plugin.json manifest (in plugin root)."""
+    """Load plugin's plugin.json manifest.
+
+    Checks plugin root first, then falls back to .claude-plugin/plugin.json
+    (used by some external marketplace repos).
+    """
     manifest_path = plugin_dir / "plugin.json"
-    if not manifest_path.exists():
-        return None
-    with open(manifest_path) as f:
-        return json.load(f)
+    if manifest_path.exists():
+        with open(manifest_path) as f:
+            return json.load(f)
+
+    # Fallback: check .claude-plugin/plugin.json
+    fallback_path = plugin_dir / ".claude-plugin" / "plugin.json"
+    if fallback_path.exists():
+        with open(fallback_path) as f:
+            return json.load(f)
+
+    return None
 
 
 def convert_hooks_format(old_hooks_path: Path, new_hooks_path: Path, plugin_name: str) -> bool:
@@ -178,7 +189,12 @@ def process_plugin(plugin_dir: Path, prefix: str) -> dict | None:
 
 
 def scan_plugins(base_dir: Path, prefix: str) -> list[dict]:
-    """Scan a directory for plugins and process each one."""
+    """Scan a directory for plugins and process each one.
+
+    For external/ directories, detects marketplace repos (those with
+    .claude-plugin/marketplace.json) and scans their plugins/ subdirectory
+    for individual plugins instead of treating the whole repo as one plugin.
+    """
     plugins = []
 
     if not base_dir.exists():
@@ -188,6 +204,33 @@ def scan_plugins(base_dir: Path, prefix: str) -> list[dict]:
         if not plugin_dir.is_dir():
             continue
         if plugin_dir.name.startswith("."):
+            continue
+
+        # Check if this is an external marketplace repo
+        marketplace_manifest = plugin_dir / ".claude-plugin" / "marketplace.json"
+        if marketplace_manifest.exists():
+            print(f"  🏪 Detected marketplace repo: {plugin_dir.name}")
+            sub_plugins_dir = plugin_dir / "plugins"
+            if sub_plugins_dir.is_dir():
+                # Multi-plugin marketplace: scan its plugins/ subdir
+                for sub_dir in sorted(sub_plugins_dir.iterdir()):
+                    if not sub_dir.is_dir() or sub_dir.name.startswith("."):
+                        continue
+                    sub_prefix = f"{prefix}/{plugin_dir.name}/plugins"
+                    entry = process_plugin(sub_dir, sub_prefix)
+                    if entry:
+                        plugins.append(entry)
+            else:
+                # Single-plugin marketplace: synthesize from marketplace.json
+                with open(marketplace_manifest) as f:
+                    mkt_data = json.load(f)
+                mkt_plugins = mkt_data.get("plugins", [])
+                if mkt_plugins:
+                    # Use first plugin entry, fix source path
+                    entry_data = mkt_plugins[0].copy()
+                    entry_data["source"] = f"./{prefix}/{plugin_dir.name}"
+                    plugins.append(entry_data)
+                    print(f"  📦 Synthesized from marketplace.json: {entry_data.get('name')}")
             continue
 
         entry = process_plugin(plugin_dir, prefix)
